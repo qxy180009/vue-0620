@@ -5,7 +5,7 @@ import Vue from 'vue'
 import app from './app.vue'
 
 // 导入MUI的样式
-import './lib/mui/css/mui.min.css'
+import  './lib/mui/css/mui.min.css'
 
 import MintUI from 'mint-ui'
 
