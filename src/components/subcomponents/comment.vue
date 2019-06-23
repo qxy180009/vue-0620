@@ -2,10 +2,11 @@
     <div class="cmt-container">
         <h3>发表评论</h3>
         <hr>
-        <textarea placeholder="请输入的内容(<= 120)" maxlength="120"></textarea>
+        <textarea placeholder="请输入的内容(<= 120)" maxlength="120"
+        v-model="msg"></textarea>
 
         <!-- 先导入样式 -->
-        <mt-button type="primary" size="large">发表评论</mt-button>
+        <mt-button type="primary" size="large" @click="postComment">发表评论</mt-button>
 
         <div class="cmt-list">
             <div class="cmt-item" v-for="{item, i} in comments" :key="item.add_time">
@@ -28,7 +29,8 @@ export default {
     data() {
         return {
             pageIndex: 1, // 默认展示 第一页数据
-            comments: [] // 所有评论数据
+            comments: [], // 所有评论数据
+            msg: '' // 评论输入的内容
         }
     },
     created(){
@@ -51,6 +53,31 @@ export default {
         getMore(){ // 加载更多
             this.pageIndex++;
             this.getComments();
+        },
+        postComment(){
+            // 校验是否为空内容
+            if (this.msg.trim().length === 0) {
+                return Toast('评论内容不能为空');
+            }
+            // 发表评论 post到服务器
+            // 1. 参数1: 请求的URL地址
+            // 2. 参数2: 提交给服务器的数据对象 {content: this.msg}
+            // 3. 参数3: 定义提交时候, 表单中的数据格式
+            this.$http.post('api/postComment/' + this.$route.params.id, {
+                content: this.msg.trim()
+                .then(function(){result => {
+                    if (result.body.status === 0) {
+                        // 1. 拼接一个评论对象
+                        var cmt = {
+                            user_name: '匿名用户',
+                            add_time: Date.now(), 
+                            content: this.msg.trim()
+                        };
+                        this.comments.unshift(cmt);
+                        this.msg = '';
+                    };
+                }}) 
+            });
         }
     },
     props: ["id"]

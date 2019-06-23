@@ -18,7 +18,8 @@ import VueResource from 'vue-resource'
 Vue.use(VueResource)
 // 设置请求的根路径
 Vue.http.options.root = 'http://vue.studyit.io';
-
+// 全局设置 post 时候 表单数据格式组织形式 application/url-encoded...
+Vue.http.options.emulateJSON = true
 
 // 导入app根组件
 import app from './app.vue'
@@ -30,6 +31,10 @@ import MintUI from 'mint-ui'
 
 import 'mint-ui/lib/style.css'
 Vue.use(MintUI)
+
+// 安装vue-preview 图片预览插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 
 // 1.3 导入自己的router.js路由模块
 import router from './router.js'
